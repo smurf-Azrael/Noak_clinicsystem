@@ -1,28 +1,27 @@
-// Define the Doctor class
 class Doctor {
     constructor(name, avgConsultationTime) {
         this.name = name;
-        this.avgConsultationTime = avgConsultationTime; // in minutes
+        this.avgConsultationTime = avgConsultationTime;
     }
 }
 
-// Function to calculate estimated waiting time
 function calculateWaitingTime(doctors, positionInQueue) {
-    const numPatients = positionInQueue; // Total patients ahead of the new patient
+    const numPatients = positionInQueue;
     const totalDoctors = doctors.length;
 
-    // Total waiting time variable
     let totalWaitingTime = 0;
 
-    // Distribute patients among doctors
-    const patientsPerDoctor = Math.floor(numPatients / totalDoctors);
-    const extraPatients = numPatients % totalDoctors; // Patients that don't evenly divide
+    if (numPatients === 0) {
+        return totalWaitingTime;
+    }
 
-    // Calculate waiting time for each doctor
+    const patientsPerDoctor = Math.floor(numPatients / totalDoctors);
+    const extraPatients = numPatients % totalDoctors;
+
     for (let i = 0; i < totalDoctors; i++) {
         let patientsForThisDoctor = patientsPerDoctor;
         if (i < extraPatients) {
-            patientsForThisDoctor++; // Distribute extra patients
+            patientsForThisDoctor++;
         }
 
         totalWaitingTime += patientsForThisDoctor * doctors[i].avgConsultationTime;
@@ -31,9 +30,8 @@ function calculateWaitingTime(doctors, positionInQueue) {
     return totalWaitingTime;
 }
 
-// Handle form submission
 document.getElementById("waitingTimeForm").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent form submission
+    event.preventDefault();
 
     const numDoctors = parseInt(document.getElementById("numDoctors").value);
     const queuePosition = parseInt(document.getElementById("queuePosition").value);
@@ -46,6 +44,6 @@ document.getElementById("waitingTimeForm").addEventListener("submit", function (
         }
     }
 
-    const waitingTime = calculateWaitingTime(doctors, queuePosition - 1); // Adjust for zero-based index
+    const waitingTime = calculateWaitingTime(doctors, queuePosition - 1);
     document.getElementById("result").innerText = `Estimated waiting time for the patient is ${waitingTime} minutes.`;
 });
